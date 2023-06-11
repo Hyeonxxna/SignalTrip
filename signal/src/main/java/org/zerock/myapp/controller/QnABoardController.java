@@ -86,9 +86,10 @@ public class QnABoardController {
 		
 	} // register
 
-//	 3. 특정 게시물 상세조회
+	// 3. 특정 게시물 상세조회
     @GetMapping(path={"/get*", "/modify*"},  params = "postNo")
-    void get(@RequestParam Integer postNo, Model model, Criteria cri, Integer currPage, RedirectAttributes rttrs, CommentCriteria commentCri) throws  ControllerException {
+    void get(@RequestParam Integer postNo, Model model, Criteria cri, Integer currPage, 
+				RedirectAttributes rttrs, CommentCriteria commentCri) throws  ControllerException {
         log.trace("get() invoked.");
 
         try{
@@ -110,7 +111,7 @@ public class QnABoardController {
         } // try-catch
     } // get
     
-//     4. 특정 게시물 업데이트(수정화면)
+	// 4. 특정 게시물 업데이트(수정화면)
     @PostMapping("/modify")
     String modify(QnABoardDTO dto, Integer currPage, RedirectAttributes rttrs) throws ControllerException {
     	log.trace("modify({}, {}) invoked.", dto, currPage);
@@ -130,23 +131,7 @@ public class QnABoardController {
 			throw new ControllerException(e);
 		} // try-catch
     } // modify
-    
-//    @GetMapping(path={"/modify"},  params = "postNo")
-//    void get(@RequestParam Integer postNo, Model model) throws  ControllerException {
-//        log.trace("get() invoked.");
-//
-//        try{
-//        	Integer rc = this.service.updateReadcnt(postNo);
-//        	model.addAttribute("_BOARD_", rc);
-//    	
-//            QnABoardVO vo = this.service.get(postNo);
-//            model.addAttribute("__BOARD__", vo);
-//            
-//        }catch (Exception e){
-//            throw new ControllerException(e);
-//        } // try-catch
-//    } // modify
-    
+
     // 5. 특정 게시물 삭제(DELETE)
 	@PostMapping("/remove")
 	String remove(@RequestParam("postNo") Integer postNo, Integer currPage, RedirectAttributes rttrs) throws ControllerException {
@@ -164,21 +149,10 @@ public class QnABoardController {
 		} catch(Exception e) {
 			throw new ControllerException(e);
 		} // try-catch
-	} // remove
-	
-	// ----------- 댓글 C/U/D ----------
-	
-//	 @PostMapping(path={"/get*", "/reply"},  params = "postNo")
-//	 void readReply(Model model, RedirectAttributes rttrs, Criteria cri) throws ServiceException {
-//		   List<QnACommentVO> commentList = this.commentService.getList(cri);
-//           model.addAttribute("__COMMENT_LIST__", commentList);
-//           log.info("\t+ 댓글 조회된다아아아아");
-//           
-//           PageDTO pageDTO = new PageDTO(cri, this.service.getTotal());
-//   			model.addAttribute("pageMaker", pageDTO);
-//	}
+	} // remove	
 	 
-	// 댓글 등록
+
+	// 1. 댓글 등록
 //	@RequestMapping(value = "/qnaReply", method= {RequestMethod.POST})
 	@PostMapping("/qnaReply")
 	String insert(
@@ -199,46 +173,34 @@ public class QnABoardController {
 	        throw new ControllerException(e);
 	    }
 	} // addComment
-
-
-//			@GetMapping("/qnaReply")
-//			String Getinsert(@ModelAttribute QnACommentDTO dto, Criteria cri,RedirectAttributes rttrs) throws ControllerException {
-//			    log.trace("addComment({}) invoked.", dto);
-//			    try {
-//			    	commentService.insert(dto);
-//			        rttrs.addAttribute("postNo", dto.getPostNo());
-//			        return "redirect:/board/qna/get?currPage="+cri.getCurrPage();
-//			    } catch (Exception e) {
-//			        throw new ControllerException(e);
-//			    }
-//			} // addComment
 			
 			
-			// 댓글 수정
-			@PostMapping("/edit")
-			String editComment(QnACommentDTO dto, RedirectAttributes rttrs, Criteria cri) throws ControllerException {
-				log.trace("editComment({}) invoked.", dto);
-				
-				try {
-					this.commentService.update(dto);
-					rttrs.addAttribute("postNo", dto.getPostNo());
-					return "redirect:/board/qna/get?currPage="+cri.getCurrPage();
-				} catch (Exception e) {
-					throw new ControllerException(e);
-				}
-			} // editComment
+	// 2. 댓글 수정
+	@PostMapping("/edit")
+	String editComment(QnACommentDTO dto, RedirectAttributes rttrs, Criteria cri) throws ControllerException {
+		log.trace("editComment({}) invoked.", dto);
+		
+		try {
+			this.commentService.update(dto);
+			rttrs.addAttribute("postNo", dto.getPostNo());
+			return "redirect:/board/qna/get?currPage="+cri.getCurrPage();
+		} catch (Exception e) {
+			throw new ControllerException(e);
+		}
+	} // editComment
 			
-			// 댓글 삭제
-			@PostMapping("/delete")
-			String deleteComment(@RequestParam(value = "commentNo", required=false) Integer commentNo, Integer postNo,RedirectAttributes rttrs) throws ControllerException {
-				log.trace("deleteComment({}) invoked.", commentNo);
-				
-				try {
-					this.commentService.delete(commentNo);
-					rttrs.addAttribute("postNo", postNo);
-					return "redirect:/board/qna/get";
-				} catch (Exception e) {
-					throw new ControllerException(e);
-				}
-			} // deleteComment
+	// 3. 댓글 삭제
+	@PostMapping("/delete")
+	String deleteComment(@RequestParam(value = "commentNo", required=false) Integer commentNo, Integer postNo,RedirectAttributes rttrs) throws ControllerException {
+		log.trace("deleteComment({}) invoked.", commentNo);
+		
+		try {
+			this.commentService.delete(commentNo);
+			rttrs.addAttribute("postNo", postNo);
+			return "redirect:/board/qna/get";
+		} catch (Exception e) {
+			throw new ControllerException(e);
+		}
+	} // deleteComment
+	
 } // end class

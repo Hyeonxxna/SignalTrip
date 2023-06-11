@@ -8,10 +8,4 @@ public interface PinService {
 	
 	public abstract Integer doPin(PinDTO pin) throws ServiceException;
 	
-//	public abstract Boolean delete(Integer pinNo) throws ServiceException;
-	
-//	public abstract List<PinDTO> select(String nickName);
-//	
-//	public abstract Integer checkPin(PinDTO pin);
-	
 } // end interface
